@@ -36,7 +36,6 @@ def generate_launch_description():
             package='ina219_battery',
             executable='battery_monitor_node',
             name='battery_monitor_node',
-            output='screen'
         ),
         # Node for the SSD1306 OLED display
         Node(
@@ -50,6 +49,5 @@ def generate_launch_description():
             package='i2c_motor_driver',
             executable='i2c_motor_node',
             name='i2c_motor_node',
-            output='screen'
         )
     ])
