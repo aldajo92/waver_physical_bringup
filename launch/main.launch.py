@@ -47,7 +47,13 @@ def generate_launch_description():
         # Node for the i2c motor driver
         Node(
             package='i2c_motor_driver',
-            executable='i2c_motor_node',
-            name='i2c_motor_node',
+            executable='motor_node',
+            name='motor_node',
+        ),
+        # Node for the velocity sensor
+        Node(
+            package='i2c_motor_driver',
+            executable='velocity_node',
+            name='velocity_node',
         )
     ])
