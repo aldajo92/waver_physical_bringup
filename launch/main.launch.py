@@ -55,5 +55,11 @@ def generate_launch_description():
             package='i2c_motor_driver',
             executable='velocity_node',
             name='velocity_node',
-        )
+        ),
+        # Node for Odometry
+        Node(
+            package='waver_odometry',
+            executable='odometry_node',
+            name='odometry_node'
+        ),
     ])
