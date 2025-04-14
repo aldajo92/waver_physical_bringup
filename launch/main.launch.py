@@ -62,4 +62,11 @@ def generate_launch_description():
             executable='odometry_node',
             name='odometry_node'
         ),
+        # ros2 run imu_bno055 bno055_i2c_node
+        Node(
+            package='imu_bno055',
+            executable='bno055_i2c_node',
+            name='imu_node',
+            namespace='imu',
+        ),
     ])
