@@ -31,6 +31,16 @@ def generate_launch_description():
                 ])
             }.items()
         ),
+        # Launcher for the Lidar: ros2 launch ldlidar_stl_ros2 ld06.launch.py
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                PathJoinSubstitution([
+                    FindPackageShare('ldlidar_stl_ros2'),
+                    'launch',
+                    'ld06.launch.py'
+                ])
+            )
+        ),
         # Node for the battery monitor
         Node(
             package='ina219_battery',
