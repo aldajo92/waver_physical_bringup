@@ -32,14 +32,38 @@ def generate_launch_description():
             }.items()
         ),
         # Launcher for the Lidar: ros2 launch ldlidar_stl_ros2 ld06.launch.py
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                PathJoinSubstitution([
-                    FindPackageShare('ldlidar_stl_ros2'),
-                    'launch',
-                    'ld06.launch.py'
-                ])
-            )
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(
+        #         PathJoinSubstitution([
+        #             FindPackageShare('ldlidar_stl_ros2'),
+        #             'launch',
+        #             'ld06.launch.py'
+        #         ])
+        #     )
+        # ),
+        Node(
+            package='ldlidar_stl_ros2',
+            executable='ldlidar_stl_ros2_node',
+            name='LD06',
+            output='screen',
+            parameters=[
+                {'product_name': 'LDLiDAR_LD06'},
+                {'topic_name': 'scan'},
+                {'frame_id': 'base_laser'},
+                {'port_name': '/dev/ttyUSB0'},
+                {'port_baudrate': 230400},
+                {'laser_scan_dir': True},
+                {'enable_angle_crop_func': False},
+                {'angle_crop_min': 135.0},
+                {'angle_crop_max': 225.0}
+            ]
+        ),
+        # base_link to base_laser tf node
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='base_link_to_base_laser_ld06',
+            arguments=['0','0','0.14','0','0','0','base_footprint','base_laser']
         ),
         # Node for the battery monitor
         Node(
