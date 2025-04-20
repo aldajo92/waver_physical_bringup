@@ -13,6 +13,12 @@ def generate_launch_description():
         'params',
         'display_config.yaml'
     )
+    
+    ekf_config_file = os.path.join(
+        get_package_share_directory('waver_physical_bringup'),
+        'params',
+        'ekf.yaml'
+    )
     return LaunchDescription([
         # Include the teleop_twist_joy launch file with a custom parameter file
         IncludeLaunchDescription(
@@ -55,7 +61,8 @@ def generate_launch_description():
                 {'laser_scan_dir': True},
                 {'enable_angle_crop_func': False},
                 {'angle_crop_min': 135.0},
-                {'angle_crop_max': 225.0}
+                {'angle_crop_max': 225.0},
+                {'publish_frequency': 5}
             ]
         ),
         # base_link to base_laser tf node
@@ -63,7 +70,8 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             name='base_link_to_base_laser_ld06',
-            arguments=['0','0','0.14','0','0','0','base_footprint','base_laser']
+            # arguments=['0','0','0.14','1.5708','0','0','base_footprint','base_laser']
+            arguments=['0','0','0.10','1.5708','0','0','base_footprint','base_laser']
         ),
         # Node for the battery monitor
         Node(
@@ -102,5 +110,23 @@ def generate_launch_description():
             executable='bno055_i2c_node',
             name='imu_node',
             namespace='imu',
+            parameters=[
+                {'frame_id': 'imu_frame'},
+                {'rate': 10.0},
+            ]
         ),
+        # Node for the IMU tf node
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            name='base_link_to_imu',
+            arguments=['0','0','0.14','1.5708','0','0','base_footprint','imu_frame']
+        ),
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[ekf_config_file],
+        )
     ])
