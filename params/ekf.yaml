@@ -9,24 +9,46 @@ ekf_filter_node:
     base_link_frame: "base_footprint"
     world_frame: "odom"  # use "map" if GPS or global ref is used
 
-    odometry0: /odom
-    odometry0_config: [true, true, false,  # x, y, z
-                       false, false, false,  # roll, pitch, yaw
-                       true, false, false,   # vx, vy, vz
-                       false, false, false,  # vroll, vpitch, vyaw
-                       false, false, false]  # ax, ay, az
-    odometry0_differential: false
-    odometry0_relative: false
+
+    use_control_input: true
+    control_timeout: 0.2  # Timeout for control input in seconds
+
+    # Control input topic
+    control_input: /cmd_vel
+
+    # Control input configuration
+    control_config: [true, false, false,  # vx, vy, vz
+                     false, false, true]  # 
+
+    # odometry0: /odom
+    # odometry0_config: [true, true, false,  # x, y, z
+    #                    false, false, false,  # roll, pitch, yaw
+    #                    true, false, false,   # vx, vy, vz
+    #                    false, false, false,  # vroll, vpitch, vyaw
+    #                    false, false, false]  # ax, ay, az
+    # odometry0_differential: false
+    # odometry0_relative: true
 
     imu0: /imu/data
     imu0_config: [false, false, false,  # x, y, z (position)
-                  true, true, true,     # roll, pitch, yaw (orientation)
+                  false, false, true,     # roll, pitch, yaw (orientation)
                   false, false, false,  # vx, vy, vz
-                  true, true, true,     # vroll, vpitch, vyaw
+                  false, false, true,     # vroll, vpitch, vyaw
                   true, false, false]  # ax, ay, az
     imu0_differential: false
     imu0_relative: true
-    use_control_input: false
+    imu0_linear_acceleration_covariance: [0.001, 0.0, 0.0,
+                                          0.0, 0.1, 0.0,
+                                          0.0, 0.0, 0.1]
+
+    twist0: /vel_from_i2c
+    twist0_config: [false, false, false,  # x, y, z (position)
+                    false, false, false,   # roll, pitch, yaw (orientation)
+                    true, false, false,   # vx, vy, vz
+                    false, false, true,  # vroll, vpitch, vyaw
+                    false, false, false]  # ax, ay, az
+    twist0_differential: true
+    twist0_relative: true
 
     # [ADVANCED] The process noise covariance matrix can be difficult to tune, and can vary for each application, so it is
     # exposed as a configuration parameter. This matrix represents the noise we add to the total error after each
@@ -42,7 +64,7 @@ ekf_filter_node:
                                 0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
                                 0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
                                 0.0,    0.0,    0.0,    0.0,    0.0,    0.01,   0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
-                                0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.100,   0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
+                                0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.01,   0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
                                 0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
                                 0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
                                 0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,     0.0,     0.0,    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,
